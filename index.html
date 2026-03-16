@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>void — let it all out</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/*
+════════════════════════════════════════════════
+  COLOR PSYCHOLOGY MAP
+  Deep Indigo #07071a  — Night, privacy, zero threat.
+                         Brain = "safe, no one's watching."
+  Soft Violet #8b6fd4  — Subconscious bridge. Purple sits
+                         between logic (blue) and emotion (red).
+                         Linked to deep processing & release.
+  Muted Blue  #5b8fd4  — Trust, calm, grief container.
+                         Lowers cortisol. Safe to be sad.
+  Clay Red    #d4614a  — Anger without alarm. Warm red
+                         validates fury without amplifying it.
+  Amber       #d4a24a  — Anxiety grounding. Warm golden light
+                         = primal safety (fire, warmth, home).
+  Sage Green  #4aad8a  — Most restful for human eye. Growth
+                         after emptiness. Nature = safe.
+  Dusty Rose  #c47485  — Compassion signal. Baker Miller Pink
+                         research: desaturated pink reduces
+                         aggression, creates "cared for" feeling.
+  Warm Cream  #ede6d8  — Not white (clinical) not gray (cold).
+                         Like candlelight — warmth, presence.
+════════════════════════════════════════════════
+*/
+
+:root{
+  --bg:#07071a;
+  --accent:#8b6fd4;
+  --accent-rgb:139,111,212;
+  --orb:#6b4fc4;
+  --acc-text:#c4b0f4;
+  --text:#f0e8da;
+  --dim:#8a849c;
+  --faint:#4a4660;
+  --very-faint:#2a2840;
+  --line:rgba(255,255,255,0.09);
+  --glass:rgba(255,255,255,0.05);
+  --glass-b:rgba(255,255,255,0.1);
+}
+
+html{height:100%}
+
+body{
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:3rem 1.5rem 4rem;
+  position:relative;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ── STAR CANVAS ── */
+#sc{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── ORBS ── */
+#oa,#ob{
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+}
+#oa{
+  width:80vmax;height:80vmax;
+  filter:blur(110px);
+  opacity:0;
+  z-index:1;
+  animation:breatheA 7s ease-in-out infinite;
+  transition:opacity 1.2s ease;
+}
+#ob{
+  width:28vmax;height:28vmax;
+  filter:blur(55px);
+  opacity:0;
+  z-index:1;
+  animation:breatheB 4.5s ease-in-out infinite 1s;
+  transition:opacity 1.2s ease;
+}
+@keyframes breatheA{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+@keyframes breatheB{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.12)}}
+@keyframes orbPop{
+  0%{transform:translate(-50%,-50%) scale(1);opacity:0.22}
+  35%{transform:translate(-50%,-50%) scale(2.6);opacity:0.42}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:0.22}
+}
+.pop{animation:orbPop 1.4s cubic-bezier(.16,1,.3,1) forwards!important}
+
+/* ── MAIN WRAP ── */
+.wrap{
+  max-width:600px;width:100%;
+  position:relative;z-index:2;
+}
+
+/* staggered entrance */
+header,.mood-sec,.glass-card,.response-card,footer{
+  opacity:0;
+  animation:slideUp 0.8s cubic-bezier(.16,1,.3,1) forwards;
+}
+header{animation-delay:.15s}
+.mood-sec{animation-delay:.3s}
+.glass-card{animation-delay:.45s}
+.response-card{animation-delay:.55s}
+footer{animation-delay:.65s}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(22px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── HEADER ── */
+header{text-align:center;margin-bottom:2.6rem}
+
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,9vw,4.2rem);
+  font-weight:300;
+  letter-spacing:.65em;
+  padding-left:.65em;
+  line-height:1;
+  color:var(--text);
+}
+.logo .dot{
+  color:var(--accent);
+  letter-spacing:0;padding-left:0;
+  transition:color .9s ease;
+}
+.tagline{
+  margin-top:.85rem;
+  font-size:.63rem;
+  letter-spacing:.26em;
+  color:var(--dim);
+  text-transform:uppercase;
+  font-weight:300;
+}
+
+/* ── MOOD SECTION ── */
+.mood-sec{margin-bottom:1.8rem;text-align:center}
+.mood-hint{
+  display:block;
+  font-size:.63rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--dim);
+  margin-bottom:.9rem;
+  font-weight:300;
+}
+.mood-pills{
+  display:flex;gap:.5rem;
+  justify-content:center;flex-wrap:wrap;
+}
+.pill{
+  display:flex;align-items:center;gap:.45rem;
+  padding:.42rem 1.05rem;
+  border-radius:99px;
+  border:1px solid var(--very-faint);
+  background:transparent;
+  color:var(--dim);
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;font-weight:300;
+  letter-spacing:.06em;
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+}
+.pill .pip{
+  width:7px;height:7px;border-radius:50%;
+  flex-shrink:0;opacity:.5;
+  transition:opacity .4s,transform .4s;
+}
+.pill:hover{border-color:var(--dim);color:var(--text)}
+.pill:hover .pip{opacity:1;transform:scale(1.2)}
+.pill.on{
+  border-color:var(--accent);
+  color:var(--acc-text);
+  background:rgba(var(--accent-rgb),.1);
+  box-shadow:0 0 22px rgba(var(--accent-rgb),.14);
+}
+.pill.on .pip{opacity:1}
+
+/* ── GLASS CARD ── */
+.glass-card{
+  background:var(--glass);
+  border:1px solid var(--glass-b);
+  border-radius:20px;
+  padding:1.8rem 1.8rem 1.1rem;
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  position:relative;overflow:hidden;
+  transition:border-color .5s,box-shadow .5s;
+}
+.glass-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+  pointer-events:none;
+}
+.glass-card.focused{
+  border-color:rgba(var(--accent-rgb),.35);
+  box-shadow:0 0 50px rgba(var(--accent-rgb),.07),inset 0 0 80px rgba(var(--accent-rgb),.025);
+}
+
+textarea{
+  width:100%;min-height:158px;
+  background:transparent;border:none;outline:none;resize:none;
+  color:#f0e8da;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.2rem,3.5vw,1.55rem);
+  font-weight:400;line-height:1.9;
+  caret-color:var(--accent);
+  overflow:hidden;
+  transition:caret-color .7s;
+}
+textarea::placeholder{color:var(--faint);font-style:italic;font-weight:300}
+
+.count{
+  font-size:.58rem;letter-spacing:.12em;
+  color:var(--dim);text-align:right;
+  margin-top:.3rem;min-height:1rem;
+  font-weight:300;transition:color .3s;
+}
+
+.card-foot{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-top:.9rem;padding-top:.9rem;
+  border-top:1px solid var(--line);
+  flex-wrap:wrap;gap:.8rem;
+}
+
+/* ── TOGGLE ── */
+.tog-wrap{
+  display:flex;align-items:center;gap:.65rem;
+  cursor:pointer;user-select:none;
+}
+.tog-wrap input{position:absolute;opacity:0;width:0;height:0}
+.tog-track{
+  width:36px;height:20px;
+  background:var(--very-faint);border-radius:99px;
+  position:relative;flex-shrink:0;
+  transition:background .35s;
+}
+.tog-thumb{
+  position:absolute;
+  width:14px;height:14px;
+  left:3px;top:3px;
+  background:var(--dim);border-radius:50%;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),background .35s;
+}
+.tog-wrap input:checked+.tog-track{background:#5a2a3a}
+.tog-wrap input:checked+.tog-track .tog-thumb{
+  transform:translateX(16px);background:#c47485;
+}
+.tog-lbl{
+  font-size:.68rem;font-weight:300;letter-spacing:.1em;
+  color:var(--dim);transition:color .35s;
+}
+.tog-wrap:has(input:checked) .tog-lbl{color:#e4a8b8}
+
+/* ── RELEASE BUTTON ── */
+.release-btn{
+  position:relative;overflow:hidden;
+  padding:.55rem 2.2rem;
+  background:transparent;
+  border:1px solid var(--very-faint);
+  border-radius:6px;
+  color:var(--dim);
+  font-family:'DM Sans',sans-serif;
+  font-size:.68rem;font-weight:300;
+  letter-spacing:.24em;text-transform:uppercase;
+  cursor:pointer;
+  transition:border-color .35s,color .35s,box-shadow .35s;
+}
+.release-btn::after{
+  content:'';
+  position:absolute;top:0;left:-80%;
+  width:55%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+  transform:skewX(-18deg);
+}
+.release-btn:not(:disabled):hover{
+  border-color:var(--accent);
+  color:var(--acc-text);
+  box-shadow:0 0 24px rgba(var(--accent-rgb),.22);
+}
+.release-btn:not(:disabled):hover::after{animation:shimmer .65s ease forwards}
+@keyframes shimmer{to{left:140%}}
+.release-btn:not(:disabled):active{transform:scale(.97)}
+.release-btn:disabled{opacity:.18;cursor:not-allowed}
+
+/* ── RELEASE MESSAGE ── */
+#rmsg{
+  text-align:center;
+  font-size:.62rem;letter-spacing:.24em;
+  text-transform:uppercase;
+  min-height:1.3rem;margin-top:1.6rem;
+  opacity:0;transition:opacity .55s;
+  color:var(--dim);
+}
+#rmsg.show{opacity:1}
+#rmsg.sage{color:#6aad8e}
+#rmsg.warm{color:var(--acc-text)}
+
+/* ── RESPONSE CARD ── */
+.response-card{
+  margin-top:1.6rem;
+  background:rgba(240,220,180,.03);
+  border:1px solid rgba(240,220,180,.08);
+  border-radius:16px;
+  padding:1.4rem 1.6rem;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+  position:relative;overflow:hidden;
+}
+.response-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(240,200,140,.15),transparent);
+}
+.response-card.open{opacity:1;transform:translateY(0);pointer-events:all}
+.resp-lbl{
+  font-size:.58rem;letter-spacing:.28em;
+  text-transform:uppercase;color:rgba(240,200,140,.25);
+  margin-bottom:.85rem;
+}
+.resp-txt{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,3vw,1.3rem);
+  font-weight:300;font-style:italic;
+  line-height:2;
+  color:#e8d4aa;
+}
+
+/* ── DOTS ── */
+.dots{display:inline-flex;gap:5px;align-items:center}
+.dots span{
+  width:5px;height:5px;border-radius:50%;
+  background:#c47485;
+  animation:dp 1.5s ease-in-out infinite;
+}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes dp{
+  0%,100%{opacity:.12;transform:scale(.65)}
+  50%{opacity:1;transform:scale(1)}
+}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;margin-top:3.5rem;
+  font-size:.58rem;letter-spacing:.15em;
+  line-height:2.4;color:var(--faint);font-weight:300;
+}
+
+/* ── PARTICLE CANVAS ── */
+#pc{position:fixed;inset:0;pointer-events:none;z-index:999}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{
+  position:fixed;
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--accent);
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:background .6s,transform .1s,opacity .3s;
+  opacity:.55;
+  mix-blend-mode:screen;
+}
+#cursor-ring{
+  position:fixed;
+  width:28px;height:28px;
+  border-radius:50%;
+  border:1px solid rgba(var(--accent-rgb),.3);
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:background .6s,border-color .6s;
+}
+
+/* ── SECTION SHARED ── */
+.sec-line{height:1px;background:var(--line);margin-bottom:2.8rem}
+.about-eyebrow,.stats-eyebrow{
+  font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent);font-weight:300;
+  text-align:center;margin-bottom:1rem;
+}
+
+/* ── ABOUT ── */
+.about-sec{margin-top:5rem;padding-top:.5rem}
+.about-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.7rem,5vw,2.4rem);
+  font-weight:300;line-height:1.4;
+  text-align:center;margin-bottom:1.8rem;
+  color:var(--text);
+}
+.about-title em{color:var(--acc-text);font-style:italic}
+.about-body{
+  font-size:.9rem;line-height:1.95;font-weight:300;
+  color:var(--dim);text-align:center;
+  max-width:520px;margin:0 auto 1.1rem;
+}
+.about-body em{color:var(--text);font-style:italic}
+.pillars{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+  gap:1rem;margin-top:2.2rem;
+}
+.pillar{
+  background:var(--glass);
+  border:1px solid var(--glass-b);
+  border-radius:14px;
+  padding:1.3rem 1.1rem;
+  text-align:center;
+  transition:border-color .3s,transform .3s;
+}
+.pillar:hover{border-color:rgba(var(--accent-rgb),.3);transform:translateY(-3px)}
+.pillar-icon{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto .9rem;
+}
+.pillar-name{
+  font-size:.78rem;font-weight:400;letter-spacing:.08em;
+  color:var(--text);margin-bottom:.4rem;
+}
+.pillar-desc{font-size:.7rem;color:var(--dim);line-height:1.6;font-weight:300}
+
+/* ── STATS ── */
+.stats-sec{margin-top:5rem}
+.stats-eyebrow{margin-bottom:1.8rem}
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;
+}
+.stat-card{
+  background:var(--glass);
+  border:1px solid var(--glass-b);
+  border-radius:14px;
+  padding:1.6rem 1.4rem;
+  position:relative;overflow:hidden;
+  transition:border-color .4s,transform .3s;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+}
+.stat-card:hover{border-color:rgba(var(--accent-rgb),.3);transform:translateY(-3px)}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,6vw,3rem);
+  font-weight:300;color:var(--acc-text);
+  line-height:1;margin-bottom:.6rem;
+  transition:color .6s;
+}
+.stat-label{
+  font-size:.78rem;color:var(--text);
+  line-height:1.6;font-weight:300;margin-bottom:.5rem;
+}
+.stat-src{font-size:.6rem;color:var(--dim);letter-spacing:.1em}
+.stats-footer{
+  text-align:center;margin-top:2rem;
+  font-size:.82rem;color:var(--dim);
+  font-weight:300;line-height:1.9;
+}
+.stats-footer em{color:var(--acc-text);font-style:italic}
+
+/* ── CONTACT ── */
+.contact-sec{margin-top:5rem}
+.contact-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,4.5vw,2.1rem);
+  font-weight:300;text-align:center;
+  color:var(--text);margin-bottom:1.2rem;
+}
+.contact-cards{display:flex;flex-direction:column;gap:.8rem}
+.contact-card{
+  display:flex;align-items:center;gap:1rem;
+  background:var(--glass);
+  border:1px solid var(--glass-b);
+  border-radius:14px;
+  padding:1.1rem 1.3rem;
+  text-decoration:none;
+  transition:border-color .35s,transform .3s,background .35s;
+}
+.contact-card:hover{
+  border-color:rgba(var(--accent-rgb),.3);
+  background:rgba(var(--accent-rgb),.04);
+  transform:translateX(5px);
+}
+.cc-icon{
+  width:42px;height:42px;flex-shrink:0;
+  border-radius:10px;border:1px solid;
+  display:flex;align-items:center;justify-content:center;
+}
+.cc-info{flex:1}
+.cc-label{
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:.25rem;font-weight:300;
+}
+.cc-val{
+  font-size:.9rem;color:var(--text);font-weight:300;
+}
+.cc-arrow{color:var(--dim);font-size:1rem;transition:transform .3s,color .3s}
+.contact-card:hover .cc-arrow{transform:translateX(4px);color:var(--acc-text)}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;margin-top:5rem;
+  padding-top:2rem;border-top:1px solid var(--line);
+}
+.footer-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem;font-weight:300;
+  letter-spacing:.4em;padding-left:.4em;
+  color:var(--text);margin-bottom:.5rem;
+}
+.footer-tagline{
+  font-size:.7rem;color:var(--dim);
+  letter-spacing:.14em;font-weight:300;margin-bottom:1.2rem;
+}
+.footer-links{
+  display:flex;align-items:center;justify-content:center;
+  gap:.7rem;margin-bottom:1.4rem;
+}
+.footer-links a{
+  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;font-weight:300;
+  transition:color .3s;
+}
+.footer-links a:hover{color:var(--acc-text)}
+.footer-links span{color:var(--faint)}
+.footer-copy{
+  font-size:.58rem;letter-spacing:.12em;
+  line-height:2.2;color:var(--faint);font-weight:300;
+}
+
+@media(max-width:520px){
+  body{justify-content:flex-start;padding-top:3rem}
+  .card-foot{flex-direction:column-reverse;align-items:flex-start}
+  #cursor,#cursor-ring{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .pillars{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<canvas id="sc"></canvas>
+<div id="oa"></div>
+<div id="ob"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="pc"></canvas>
+
+<div class="wrap">
+
+  <header>
+    <h1 class="logo">void<span class="dot" id="dot">.</span></h1>
+    <p class="tagline">no judgment &nbsp;·&nbsp; no memory &nbsp;·&nbsp; just release</p>
+  </header>
+
+  <div class="mood-sec">
+    <span class="mood-hint">right now i feel...</span>
+    <div class="mood-pills" id="pills">
+      <button class="pill on" data-mood="default">
+        <span class="pip" style="background:#8b6fd4"></span>just venting
+      </button>
+      <button class="pill" data-mood="sad">
+        <span class="pip" style="background:#5b8fd4"></span>heavy
+      </button>
+      <button class="pill" data-mood="angry">
+        <span class="pip" style="background:#d4614a"></span>angry
+      </button>
+      <button class="pill" data-mood="anxious">
+        <span class="pip" style="background:#d4a24a"></span>anxious
+      </button>
+      <button class="pill" data-mood="numb">
+        <span class="pip" style="background:#4aad8a"></span>numb
+      </button>
+    </div>
+  </div>
+
+  <div class="glass-card" id="card">
+    <textarea id="vent"
+      placeholder="say everything. this place forgets."
+      autocomplete="off" spellcheck="false"></textarea>
+    <p class="count" id="cnt"></p>
+    <div class="card-foot">
+      <label class="tog-wrap">
+        <input type="checkbox" id="resp-tog">
+        <div class="tog-track"><div class="tog-thumb"></div></div>
+        <span class="tog-lbl">i want to be heard</span>
+      </label>
+      <button class="release-btn" id="rbtn" disabled>let go</button>
+    </div>
+  </div>
+
+  <p id="rmsg"></p>
+
+  <div class="response-card" id="rc">
+    <p class="resp-lbl">heard</p>
+    <p class="resp-txt" id="rt"></p>
+  </div>
+
+  <!-- ── ABOUT SECTION ── -->
+  <section class="about-sec" id="about">
+    <div class="sec-line"></div>
+
+    <div class="about-eyebrow">why void exists</div>
+
+    <h2 class="about-title">we built this because<br><em>no one should carry it alone</em></h2>
+
+    <p class="about-body">
+      Most apps want you to share, post, react, perform. void is the opposite.
+      It started with a simple truth — sometimes you don't need advice. You don't need
+      likes. You don't need someone to fix you. You just need to <em>say it</em>.
+      Out loud. Without fear. Without judgment. Without it following you.
+    </p>
+
+    <p class="about-body">
+      We built void for the 3am thoughts. For the rage you can't show at work.
+      For the grief you're tired of explaining. For every feeling that has nowhere to go.
+      This is that place.
+    </p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon" style="background:rgba(139,111,212,.15);border-color:rgba(139,111,212,.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b6fd4" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="pillar-name">zero judgment</div>
+        <div class="pillar-desc">nothing you type is wrong, bad, or too much</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:rgba(74,173,138,.15);border-color:rgba(74,173,138,.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4aad8a" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="pillar-name">no memory</div>
+        <div class="pillar-desc">your words vanish the moment you release them</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon" style="background:rgba(196,116,133,.15);border-color:rgba(196,116,133,.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c47485" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="pillar-name">your choice</div>
+        <div class="pillar-desc">respond or not — you decide how much you need</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS SECTION ── -->
+  <section class="stats-sec">
+    <div class="sec-line"></div>
+    <div class="stats-eyebrow">you are not alone</div>
+    <div class="stats-grid">
+      <div class="stat-card" data-target="970" data-suffix="M+">
+        <div class="stat-num" id="s1">0</div>
+        <div class="stat-label">people live with anxiety worldwide</div>
+        <div class="stat-src">WHO, 2023</div>
+      </div>
+      <div class="stat-card" data-target="280" data-suffix="M+">
+        <div class="stat-num" id="s2">0</div>
+        <div class="stat-label">people affected by depression globally</div>
+        <div class="stat-src">WHO, 2023</div>
+      </div>
+      <div class="stat-card" data-target="1" data-suffix="in 2">
+        <div class="stat-num" id="s3">0</div>
+        <div class="stat-label">people will face a mental health crisis in their lifetime</div>
+        <div class="stat-src">Global Mental Health Report</div>
+      </div>
+      <div class="stat-card" data-target="75" data-suffix="%">
+        <div class="stat-num" id="s4">0</div>
+        <div class="stat-label">of people never talk to anyone about what they're carrying</div>
+        <div class="stat-src">Mind UK Research</div>
+      </div>
+    </div>
+    <p class="stats-footer">
+      these aren't just numbers. each one is a person who needed somewhere to go.<br>
+      <em>this is that somewhere.</em>
+    </p>
+  </section>
+
+  <!-- ── CONTACT SECTION ── -->
+  <section class="contact-sec" id="contact">
+    <div class="sec-line"></div>
+    <div class="about-eyebrow">reach out</div>
+    <h2 class="contact-title">we actually read every message</h2>
+    <p class="about-body" style="text-align:center;max-width:420px;margin:0 auto 2.2rem">
+      a story, a thought, a suggestion — or just to say void helped.
+      whatever it is, we want to hear it.
+    </p>
+
+    <div class="contact-cards">
+      <a class="contact-card" href="mailto:nobodyai.official@gmail.com">
+        <div class="cc-icon" style="background:rgba(139,111,212,.12);border-color:rgba(139,111,212,.22)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b6fd4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="cc-info">
+          <div class="cc-label">general</div>
+          <div class="cc-val">nobodyai.official@gmail.com</div>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+      <a class="contact-card" href="mailto:nobodyai.official@gmail.com">
+        <div class="cc-icon" style="background:rgba(74,173,138,.12);border-color:rgba(74,173,138,.22)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4aad8a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="cc-info">
+          <div class="cc-label">support</div>
+          <div class="cc-val">nobodyai.official@gmail.com</div>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+      <a class="contact-card" href="mailto:nobodyai.official@gmail.com">
+        <div class="cc-icon" style="background:rgba(212,162,74,.12);border-color:rgba(212,162,74,.22)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a24a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="cc-info">
+          <div class="cc-label">press & media</div>
+          <div class="cc-val">nobodyai.official@gmail.com</div>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">void<span style="color:var(--accent)">.</span></div>
+    <p class="footer-tagline">for everyone carrying something heavy</p>
+    <div class="footer-links">
+      <a href="#about">about</a>
+      <span>·</span>
+      <a href="#contact">contact</a>
+      <span>·</span>
+      <a href="mailto:nobodyai.official@gmail.com">email us</a>
+    </div>
+    <p class="footer-copy">your words never leave this page &nbsp;·&nbsp; no accounts &nbsp;·&nbsp; no logs<br>designed with human psychology · built with care</p>
+  </footer>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// MOOD CONFIG — color psychology driven
+// ════════════════════════════════════════════
+const M={
+  default:{
+    a:'#8b6fd4',rgb:'139,111,212',o:'#6b4fc4',t:'#c4b0f4',
+    msg:'released into the void  ·  gone forever',mc:'warm',
+    sys:'You are a quiet compassionate presence. Just listen and acknowledge — no advice, no silver linings. 2–4 warm sentences, real like a trusted friend.',
+  },
+  sad:{
+    a:'#5b8fd4',rgb:'91,143,212',o:'#3a6ab4',t:'#a4c8f4',
+    msg:'your heaviness was real  ·  it was heard',mc:'warm',
+    sys:'The person is sad or heavy. Be tender — no fixing, no silver linings. Sit with them in it. 2–4 sentences.',
+  },
+  angry:{
+    a:'#d4614a',rgb:'212,97,74',o:'#a43a28',t:'#f0a898',
+    msg:'your anger was real  ·  it deserved to be said',mc:'warm',
+    sys:'The person is angry. Don\'t calm them down — acknowledge the fire. Be real, not clinical. 2–4 sentences max.',
+  },
+  anxious:{
+    a:'#d4a24a',rgb:'212,162,74',o:'#a47828',t:'#f0d898',
+    msg:'breathe  ·  you got it out',mc:'warm',
+    sys:'The person is anxious. Be a calm grounding presence. Gently anchor them without dismissing the fear. 2–4 sentences.',
+  },
+  numb:{
+    a:'#4aad8a',rgb:'74,173,138',o:'#28845a',t:'#a0d8c4',
+    msg:'even numb is something  ·  you showed up',mc:'sage',
+    sys:'The person feels numb or lost. Meet the emptiness with soft presence. Don\'t push energy onto them. 2–4 sentences, quiet and warm.',
+  },
+};
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let mood='default';
+const root=document.documentElement;
+const oa=document.getElementById('oa');
+const ob=document.getElementById('ob');
+const dot=document.getElementById('dot');
+const cur=document.getElementById('cursor');
+const curR=document.getElementById('cursor-ring');
+
+// ════════════════════════════════════════════
+// CANVAS SETUP
+// ════════════════════════════════════════════
+const sc=document.getElementById('sc');
+const pc=document.getElementById('pc');
+const sCtx=sc.getContext('2d');
+const pCtx=pc.getContext('2d');
+
+function resize(){
+  sc.width=pc.width=window.innerWidth;
+  sc.height=pc.height=window.innerHeight;
+}
+resize();
+window.addEventListener('resize',()=>{resize();buildStars()});
+
+// ════════════════════════════════════════════
+// STARS — slow drift, soft twinkle
+// ════════════════════════════════════════════
+let stars=[];
+
+function buildStars(){
+  stars=[];
+  const n=Math.max(60,Math.floor(sc.width*sc.height/9000));
+  for(let i=0;i<n;i++){
+    stars.push({
+      x:Math.random()*sc.width,
+      y:Math.random()*sc.height,
+      r:Math.random()*.9+.15,
+      vx:(Math.random()-.5)*.08,
+      vy:(Math.random()-.5)*.08,
+      tw:Math.random()*Math.PI*2,
+      ts:Math.random()*.018+.004,
+      ba:Math.random()*.35+.06,
+    });
+  }
+}
+
+function tickStars(){
+  sCtx.clearRect(0,0,sc.width,sc.height);
+  for(const s of stars){
+    s.x+=s.vx; s.y+=s.vy; s.tw+=s.ts;
+    if(s.x<0)s.x=sc.width; if(s.x>sc.width)s.x=0;
+    if(s.y<0)s.y=sc.height; if(s.y>sc.height)s.y=0;
+    const a=s.ba+Math.sin(s.tw)*.08;
+    sCtx.beginPath();
+    sCtx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    sCtx.fillStyle=`rgba(255,255,255,${a})`;
+    sCtx.fill();
+  }
+  requestAnimationFrame(tickStars);
+}
+
+buildStars();
+tickStars();
+
+// Orbs wake up on load
+setTimeout(()=>{oa.style.opacity='.12';ob.style.opacity='.2'},200);
+
+// ════════════════════════════════════════════
+// MOOD ENGINE
+// ════════════════════════════════════════════
+function applyMood(m){
+  mood=m;
+  const d=M[m];
+  // Quick blink transition
+  oa.style.opacity='0.04'; ob.style.opacity='0.07';
+  setTimeout(()=>{
+    root.style.setProperty('--accent',d.a);
+    root.style.setProperty('--accent-rgb',d.rgb);
+    root.style.setProperty('--acc-text',d.t);
+    oa.style.background=d.o;
+    ob.style.background=d.a;
+    dot.style.color=d.a;
+    cur.style.background=d.a;
+    curR.style.borderColor=`rgba(${d.rgb},.3)`;
+  },200);
+  setTimeout(()=>{oa.style.opacity='.12';ob.style.opacity='.2'},420);
+}
+
+// Set initial orb colors
+oa.style.background=M.default.o;
+ob.style.background=M.default.a;
+
+document.getElementById('pills').addEventListener('click',e=>{
+  const p=e.target.closest('.pill');
+  if(!p) return;
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+  p.classList.add('on');
+  applyMood(p.dataset.mood);
+});
+
+// ════════════════════════════════════════════
+// CURSOR
+// ════════════════════════════════════════════
+let cx=window.innerWidth/2, cy=window.innerHeight/2;
+let rx=cx, ry=cy;
+
+document.addEventListener('mousemove',e=>{
+  cx=e.clientX; cy=e.clientY;
+  cur.style.left=cx+'px'; cur.style.top=cy+'px';
+});
+
+function lerpCursor(){
+  rx+=(cx-rx)*.12; ry+=(cy-ry)*.12;
+  curR.style.left=rx+'px'; curR.style.top=ry+'px';
+  requestAnimationFrame(lerpCursor);
+}
+lerpCursor();
+
+// ════════════════════════════════════════════
+// TYPING REACTIVITY
+// ════════════════════════════════════════════
+const vent=document.getElementById('vent');
+const rbtn=document.getElementById('rbtn');
+const card=document.getElementById('card');
+const cnt=document.getElementById('cnt');
+let tTimeout;
+
+vent.addEventListener('input',()=>{
+  vent.style.height='auto';
+  vent.style.height=vent.scrollHeight+'px';
+  const n=vent.value.length;
+  rbtn.disabled=vent.value.trim().length===0;
+  cnt.textContent=n>0?n+' characters':'';
+
+  // Orbs react to typing intensity
+  const intensity=Math.min(n/180,1);
+  ob.style.opacity=.2+intensity*.3+'';
+  oa.style.opacity=.12+intensity*.12+'';
+
+  card.classList.add('focused');
+  clearTimeout(tTimeout);
+  tTimeout=setTimeout(()=>{
+    card.classList.remove('focused');
+    ob.style.opacity='.2'; oa.style.opacity='.12';
+  },1800);
+});
+
+// ════════════════════════════════════════════
+// PARTICLES — letter explosion on release
+// ════════════════════════════════════════════
+let ptcls=[];
+
+function spawnPtcls(text,m){
+  ptcls=[];
+  const d=M[m];
+  const rect=vent.getBoundingClientRect();
+  const words=text.split(/\s+/).filter(Boolean);
+  const n=Math.min(words.length*5+35,130);
+
+  for(let i=0;i<n;i++){
+    const word=words[Math.floor(Math.random()*words.length)]||'·';
+    const isHot=Math.random()>.42;
+    // Some particles go sideways, some straight up, some diagonal
+    const angle=-Math.PI/2+(Math.random()-.5)*Math.PI*.9;
+    const speed=Math.random()*5+1;
+    ptcls.push({
+      x  :rect.left+Math.random()*rect.width,
+      y  :rect.top +Math.random()*rect.height,
+      vx :Math.cos(angle)*speed,
+      vy :Math.sin(angle)*speed,
+      a  :Math.random()*.7+.2,
+      sz :Math.random()*15+8,
+      ch :word[Math.floor(Math.random()*word.length)],
+      col:isHot?d.a:d.t,
+      rot:(Math.random()-.5)*.08,
+    });
+  }
+}
+
+function tickPtcls(){
+  pCtx.clearRect(0,0,pc.width,pc.height);
+  let any=false;
+  for(const p of ptcls){
+    if(p.a<=.01) continue; any=true;
+    pCtx.save();
+    pCtx.globalAlpha=p.a;
+    pCtx.fillStyle=p.col;
+    pCtx.font=`300 ${p.sz}px 'Cormorant Garamond',serif`;
+    pCtx.fillText(p.ch,p.x,p.y);
+    pCtx.restore();
+    p.x+=p.vx; p.y+=p.vy;
+    p.vx+=p.rot; p.vy*=.98; p.vx*=.99;
+    p.a-=.011;
+  }
+  if(any) requestAnimationFrame(tickPtcls);
+  else pCtx.clearRect(0,0,pc.width,pc.height);
+}
+
+// ════════════════════════════════════════════
+// ORB PULSE on release
+// ════════════════════════════════════════════
+function orbPulse(){
+  ob.classList.add('pop');
+  setTimeout(()=>ob.classList.remove('pop'),1400);
+}
+
+// ════════════════════════════════════════════
+// API
+// ════════════════════════════════════════════
+async function fetchResp(text,m){
+  const sys=M[m].sys+'\n\nHard rules: never open with "I understand" or "I hear you". No advice unless asked. Show warmth through specificity, not platitudes. End like a soft exhale — not a lesson.';
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      system:sys,
+      messages:[{role:'user',content:text}],
+    }),
+  });
+  if(!res.ok) throw new Error();
+  const data=await res.json();
+  return data.content[0].text;
+}
+
+// ════════════════════════════════════════════
+// TYPEWRITER
+// ════════════════════════════════════════════
+function typewrite(el,text,spd=23){
+  el.textContent=''; let i=0;
+  const tick=()=>{if(i<text.length){el.textContent+=text[i++];setTimeout(tick,spd);}};
+  tick();
+}
+
+// ════════════════════════════════════════════
+// STATUS MSG
+// ════════════════════════════════════════════
+const rmsg=document.getElementById('rmsg');
+function showMsg(text,cls){
+  rmsg.textContent=text;
+  rmsg.className='show '+(cls||'');
+  setTimeout(()=>rmsg.classList.remove('show'),5000);
+}
+
+// ════════════════════════════════════════════
+// RELEASE
+// ════════════════════════════════════════════
+const rc=document.getElementById('rc');
+const rt=document.getElementById('rt');
+const respTog=document.getElementById('resp-tog');
+
+rbtn.addEventListener('click',async()=>{
+  const text=vent.value.trim();
+  if(!text) return;
+
+  const m=mood;
+  rbtn.disabled=true;
+  rc.classList.remove('open');
+  rmsg.classList.remove('show');
+  card.classList.remove('focused');
+
+  orbPulse();
+  spawnPtcls(text,m);
+  tickPtcls();
+
+  if(respTog.checked){
+    rc.classList.add('open');
+    rt.innerHTML='<span class="dots"><span></span><span></span><span></span></span>';
+    try{
+      const reply=await fetchResp(text,m);
+      typewrite(rt,reply,22);
+    }catch{
+      typewrite(rt,"Something went quiet on my end — but what you wrote was real. You deserved to say it.",22);
+    }
+  }else{
+    showMsg(M[m].msg,M[m].mc);
+  }
+
+
+  vent.value='';
+  vent.style.height='auto';
+  cnt.textContent='';
+  rbtn.disabled=true;
+  ob.style.opacity='.2';
+  oa.style.opacity='.12';
+});
+
+
+// ════════════════════════════════════════════
+const statCards=document.querySelectorAll('.stat-card');
+const statEls=[
+  {el:document.getElementById('s1'),target:970,suffix:'M+'},
+  {el:document.getElementById('s2'),target:280,suffix:'M+'},
+  {el:document.getElementById('s3'),target:1,suffix:' in 2'},
+  {el:document.getElementById('s4'),target:75,suffix:'%'},
+];
+
+function animCount(el,target,suffix,dur=1800){
+  const start=performance.now();
+  const tick=(now)=>{
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,4);
+    const val=Math.round(ease*target);
+    el.textContent=val+suffix;
+    if(p<1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+let counted=false;
+const statsObs=new IntersectionObserver((entries)=>{
+  if(entries[0].isIntersecting && !counted){
+    counted=true;
+    statEls.forEach((s,i)=>{
+      setTimeout(()=>animCount(s.el,s.target,s.suffix),i*160);
+    });
+    // also shift stat num colors per mood
+    document.querySelectorAll('.stat-num').forEach(n=>{
+      n.style.color='var(--acc-text)';
+    });
+  }
+},{threshold:0.25});
+
+const statSec=document.querySelector('.stats-sec');
+if(statSec) statsObs.observe(statSec);
+
+// ════════════════════════════════════════════
+// SCROLL REVEAL for sections
+// ════════════════════════════════════════════
+const reveals=document.querySelectorAll('.about-sec,.stats-sec,.contact-sec');
+const revObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='1';
+      e.target.style.transform='translateY(0)';
+    }
+  });
+},{threshold:0.1});
+
+reveals.forEach(el=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(30px)';
+  el.style.transition='opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1)';
+  revObs.observe(el);
+});
+</script>
+</body>
+</html>
